@@ -21,32 +21,24 @@ flutter pub get
 ### 2. 创建 `.env` 文件
 ```env
 # assets/.env
-API_BASE_URL=https://api-ednpoint/
+API_BASE_URL=http://10.0.2.2:3000
 ```
 
-### 3. 配置代理（可选）
-如果无法访问端点可以在 **api_client.dart** 配置代理
-```api_client.dart
-client.findProxy = (uri) {
-  return "PROXY 10.0.2.2:10810";
-};
-```
-
-### 4. 初始化后端
-```terminal
+### 3. 初始化后端
+```bash
 cd backend
 bun install
 bunx prisma generate
 ```
 
-### 5. 设置 ./backend/.env
+### 4. 设置 ./backend/.env
 ```env
 DATABASE_URL="postgresql://"
 API_ENDPOINT="https://your.api/v1/chat/completions"
 API_KEY="sk-"
 ```
 
-### 6. 运行后端
-```
+### 5. 运行后端
+```bash
 bun run dev
 ```
