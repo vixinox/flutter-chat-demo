@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MessageRole {
+  user
+  assistant
+  system
+}
+
+enum MessageStatus {
+  sending
+  sent
+  failed
+  received
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  conversationId String
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           MessageRole
+  content        String
+  createdAt      DateTime      @default(now())
+  status         MessageStatus @default(sent)
+
+  // snapshot of the model at the time of the message
+  modelName        String?
+  modelDisplayName String?
+  modelProvider    String?
+
+  @@index([conversationId])
+}
+
+model Model {
+  id          String @id @default(uuid())
+  name        String @unique
+  displayName String
+  provider    String
+}
